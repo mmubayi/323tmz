@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+    <title>Tapestry</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/7.1.0/firebase-app.js"></script>
@@ -12,6 +12,7 @@
     <script defer src="/__/firebase/7.1.0/firebase-database.js"></script>
     <script defer src="/__/firebase/7.1.0/firebase-messaging.js"></script>
     <script defer src="/__/firebase/7.1.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/7.2.2/firebase-firestore.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -36,10 +37,36 @@
       <p style="text-align:center;">
         <img src="./assets/img/goose.png" alt="goose logo" height="500">
       </p>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+      <div> 
+        <h1 id="welcome-message"> Welcome. </h1>
+        <h2 id="user1"> user1 </h2>
+        <h2 id="user2"> user2 </h2>
+        <h2 id="user3"> user3 </h2>
+        <h2 id="user4"> user4 </h2>
+        <h2 id="user5"> user5 </h2>
 
-    <script>
+        <p>Sample posts</p> 
+        <h3 id="q1"> question1 </h3>
+        <h3 id="a1"> answer1 </h3> 
+        
+        <h3 id="q2"> question2 </h3>
+        <h3 id="a2"> answer2 </h3>
+        <h3 id="a3"> answer3 </h3>
+
+      <button id="sign-in" onclick="signIn()" hidden>
+          Sign-in
+        </button>
+      </div>
+      <div>
+      <button id="sign-out" onclick="signOut()" hidden>
+          Sign-out
+      </button>
+      </div>
+      <p id="load">JavaScript</p>
+    </div>
+   
+   <script>
+
       document.addEventListener('DOMContentLoaded', function() {
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         // // The Firebase SDK is initialized and available here!
@@ -50,9 +77,10 @@
         // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
         //
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
         try {
           let app = firebase.app();
+          firebase.auth().onAuthStateChanged(authStateObserver);
+          initializeApp(); 
           let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
           document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
@@ -60,6 +88,107 @@
           document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
         }
       });
+
+
+      function initializeApp(){
+        //get the HTML element to print names
+        var per1 = document.getElementById("user1");
+        var per2 = document.getElementById("user2");
+        var per3 = document.getElementById("user3");
+        var per4 = document.getElementById("user4");
+        var per5 = document.getElementById("user5");
+
+        var q1 = document.getElementById("q1");
+        var q2 = document.getElementById("q2");
+        var a1 = document.getElementById("a1");
+        var a2 = document.getElementById("a2");
+        var a3 = document.getElementById("a3");
+
+        var db = firebase.firestore();
+
+        // FOR LATER : push to array of names? access by index 
+        // db.collection("users").get().then(function(querySnapshot) {
+        //   querySnapshot.forEach(function(doc) {
+        //   // doc.data() is never undefined for query doc snapshots
+        //     names.push(doc.data().name);
+        //     console.log(names.length);
+        //   });
+        // });
+
+        // SAMPLE USERS 
+        db.collection("users").doc("JsNIqbbyr4iEjbEukJrT").onSnapshot(function(document) {
+            per1.innerHTML = document.data().name;
+        });
+        db.collection("users").doc("JJ887BR6xgwQ2MrKnoOl").onSnapshot(function(document) {
+            per2.innerHTML = document.data().name;
+        });
+        db.collection("users").doc("cGRe06dBqMTLXV1ywTL5").onSnapshot(function(document) {
+            per3.innerHTML = document.data().name;
+        });
+        db.collection("users").doc("jrEH2dstxQJNGKLRHtnm").onSnapshot(function(document) {
+            per4.innerHTML = document.data().name;
+        });
+        db.collection("users").doc("zKFR4bMGWD1kmp88iTDp").onSnapshot(function(document) {
+            per5.innerHTML = document.data().name;
+        });
+
+        // SAMPLE POSTS
+        db.collection("Questions").doc("UOoiqSn900rffNDwSe1P").onSnapshot(function(document) {
+            q1.innerHTML = "question #1: " + document.data().text;
+        });
+
+        db.collection("answers").doc("2Xzo0g2WCIdy0yrIA1U1").onSnapshot(function(document) {
+            a1.innerHTML = "answer: " + document.data().text;
+        });
+
+        db.collection("Questions").doc("fPEa9NTRdd3qDOV7qH2N").onSnapshot(function(document) {
+            q2.innerHTML = "question #2: " + document.data().text;
+        });
+
+        db.collection("answers").doc("IDRoIkSJegndOjeeF7az").onSnapshot(function(document) {
+            a2.innerHTML = "answer: " + document.data().text;
+        });
+
+        db.collection("answers").doc("r9srwrBHkUtnMimeeza0").onSnapshot(function(document) {
+            a3.innerHTML = "answer: " + document.data().text;
+        });
+
+
+        
+        
+
+
+      } //end of app initialization
+
+
+    function signIn() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function() {
+        console.log("sign-in successful");
+      }).catch(function(error) {
+        console.log("error in sign-in");
+      });
+      } //end of signin
+
+    function signOut() {
+      firebase.auth().signOut().then(function() {
+        console.log("sign-out successful");
+      }).catch(function(error) {
+        console.log("error in sign-out");
+      });
+      } //end of signout
+
+
+    function authStateObserver(user) {
+      if (user) { // User is signed in!
+          document.getElementById("sign-in").hidden = true;
+          document.getElementById("sign-out").hidden = false;
+      } else { // User is signed out!
+          document.getElementById("sign-in").hidden = false;
+          document.getElementById("sign-out").hidden = true;
+        }
+      }
+    
     </script>
   </body>
 </html>
