@@ -39,19 +39,15 @@
       </p>
       <div> 
         <h1 id="welcome-message"> Welcome. </h1>
-        <h2 id="user1"> user1 </h2>
-        <h2 id="user2"> user2 </h2>
-        <h2 id="user3"> user3 </h2>
-        <h2 id="user4"> user4 </h2>
-        <h2 id="user5"> user5 </h2>
+        <h2 id="user1"> Users: <br> </h2>
 
         <p>Sample posts</p> 
-        <h3 id="q1"> question1 </h3>
-        <h3 id="a1"> answer1 </h3> 
+        <h3 id="q1"> question #1:  </h3>
+        <h3 id="a1"> answer:  </h3> 
         
-        <h3 id="q2"> question2 </h3>
-        <h3 id="a2"> answer2 </h3>
-        <h3 id="a3"> answer3 </h3>
+        <h3 id="q2"> question #2:  </h3>
+        <h3 id="a2"> answer:  </h3>
+        <h3 id="a3"> answer:  </h3>
 
       <button id="sign-in" onclick="signIn()" hidden>
           Sign-in
@@ -93,11 +89,7 @@
       function initializeApp(){
         //get the HTML element to print names
         var per1 = document.getElementById("user1");
-        var per2 = document.getElementById("user2");
-        var per3 = document.getElementById("user3");
-        var per4 = document.getElementById("user4");
-        var per5 = document.getElementById("user5");
-
+        
         var q1 = document.getElementById("q1");
         var q2 = document.getElementById("q2");
         var a1 = document.getElementById("a1");
@@ -105,58 +97,35 @@
         var a3 = document.getElementById("a3");
 
         var db = firebase.firestore();
-
-        // FOR LATER : push to array of names? access by index 
-        // db.collection("users").get().then(function(querySnapshot) {
-        //   querySnapshot.forEach(function(doc) {
-        //   // doc.data() is never undefined for query doc snapshots
-        //     names.push(doc.data().name);
-        //     console.log(names.length);
-        //   });
-        // });
-
-        // SAMPLE USERS 
-        db.collection("users").doc("JsNIqbbyr4iEjbEukJrT").onSnapshot(function(document) {
-            per1.innerHTML = document.data().name;
-        });
-        db.collection("users").doc("JJ887BR6xgwQ2MrKnoOl").onSnapshot(function(document) {
-            per2.innerHTML = document.data().name;
-        });
-        db.collection("users").doc("cGRe06dBqMTLXV1ywTL5").onSnapshot(function(document) {
-            per3.innerHTML = document.data().name;
-        });
-        db.collection("users").doc("jrEH2dstxQJNGKLRHtnm").onSnapshot(function(document) {
-            per4.innerHTML = document.data().name;
-        });
-        db.collection("users").doc("zKFR4bMGWD1kmp88iTDp").onSnapshot(function(document) {
-            per5.innerHTML = document.data().name;
+      
+        // SAMPLE USERS
+        db.collection("users").get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+            per1.innerHTML += doc.data().name + "<br>";
+          });
         });
 
         // SAMPLE POSTS
         db.collection("Questions").doc("UOoiqSn900rffNDwSe1P").onSnapshot(function(document) {
-            q1.innerHTML = "question #1: " + document.data().text;
+            q1.innerHTML += document.data().text;
         });
 
         db.collection("answers").doc("2Xzo0g2WCIdy0yrIA1U1").onSnapshot(function(document) {
-            a1.innerHTML = "answer: " + document.data().text;
+            a1.innerHTML += document.data().text;
         });
 
         db.collection("Questions").doc("fPEa9NTRdd3qDOV7qH2N").onSnapshot(function(document) {
-            q2.innerHTML = "question #2: " + document.data().text;
+            q2.innerHTML += document.data().text;
         });
 
         db.collection("answers").doc("IDRoIkSJegndOjeeF7az").onSnapshot(function(document) {
-            a2.innerHTML = "answer: " + document.data().text;
+            a2.innerHTML += document.data().text;
         });
 
         db.collection("answers").doc("r9srwrBHkUtnMimeeza0").onSnapshot(function(document) {
-            a3.innerHTML = "answer: " + document.data().text;
+            a3.innerHTML += document.data().text;
         });
-
-
-        
-        
-
 
       } //end of app initialization
 
