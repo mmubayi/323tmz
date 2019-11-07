@@ -39,7 +39,10 @@
       </p>
       <div> 
         <h1 id="welcome-message"> Welcome. </h1>
+        
         <h2 id="user1"> Users: <br> </h2>
+        
+        <h2 id="cats"> Categories: <br> </h2>
 
         <p>Sample posts</p> 
         <h3 id="q1"> question #1:  </h3>
@@ -57,6 +60,7 @@
       <button id="sign-out" onclick="signOut()" hidden>
           Sign-out
       </button>
+      
       </div>
       <p id="load">JavaScript</p>
     </div>
@@ -106,6 +110,13 @@
           });
         });
 
+        db.collection("categories").get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          cats.innerHTML += "<a href='category.html?id="+doc.id+"'>" + doc.data().name +"</a>"
+          });
+        });
+
         // SAMPLE POSTS
         db.collection("Questions").doc("UOoiqSn900rffNDwSe1P").onSnapshot(function(document) {
             q1.innerHTML += document.data().text;
@@ -134,8 +145,6 @@
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider).then(function() {
         console.log("sign-in successful");
-        var welc = document.getElementById("welcome-message");
-        welc.innerHTML = "Welcome, " + firebase.auth().currentUser.displayName;
       }).catch(function(error) {
         console.log("error in sign-in");
       });
@@ -155,6 +164,9 @@
       if (user) { // User is signed in!
           document.getElementById("sign-in").hidden = true;
           document.getElementById("sign-out").hidden = false;
+          var welc = document.getElementById("welcome-message");
+          welc.innerHTML = "Welcome, " + firebase.auth().currentUser.displayName;
+
       } else { // User is signed out!
           document.getElementById("sign-in").hidden = false;
           document.getElementById("sign-out").hidden = true;
