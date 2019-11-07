@@ -134,6 +134,8 @@
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider).then(function() {
         console.log("sign-in successful");
+        var welc = document.getElementById("welcome-message");
+        welc.innerHTML = "Welcome, " + firebase.auth().currentUser.displayName;
       }).catch(function(error) {
         console.log("error in sign-in");
       });
@@ -142,6 +144,7 @@
     function signOut() {
       firebase.auth().signOut().then(function() {
         console.log("sign-out successful");
+  
       }).catch(function(error) {
         console.log("error in sign-out");
       });
