@@ -45,12 +45,13 @@
         <h2 id="cats"> Categories: <br> </h2>
 
         <p>Sample posts</p> 
-        <h3 id="q1"> question #1:  </h3>
+        <div id='the-feed'></div>
+        <!-- <h3 id="q1"> question #1:  </h3>
         <h3 id="a1"> answer:  </h3> 
         
         <h3 id="q2"> question #2:  </h3>
         <h3 id="a2"> answer:  </h3>
-        <h3 id="a3"> answer:  </h3>
+        <h3 id="a3"> answer:  </h3> -->
 
       <button id="sign-in" onclick="signIn()" hidden>
           Sign-in
@@ -94,11 +95,11 @@
         //get the HTML element to print names
         var per1 = document.getElementById("user1");
         
-        var q1 = document.getElementById("q1");
-        var q2 = document.getElementById("q2");
-        var a1 = document.getElementById("a1");
-        var a2 = document.getElementById("a2");
-        var a3 = document.getElementById("a3");
+        // var q1 = document.getElementById("q1");
+        // var q2 = document.getElementById("q2");
+        // var a1 = document.getElementById("a1");
+        // var a2 = document.getElementById("a2");
+        // var a3 = document.getElementById("a3");
 
         var db = firebase.firestore();
       
@@ -118,25 +119,54 @@
         });
 
         // SAMPLE POSTS
-        db.collection("Questions").doc("UOoiqSn900rffNDwSe1P").onSnapshot(function(document) {
-            q1.innerHTML += document.data().text;
+        // db.collection("Questions").doc("UOoiqSn900rffNDwSe1P").onSnapshot(function(document) {
+        //     q1.innerHTML += document.data().text;
+        // });
+
+        // db.collection("answers").doc("2Xzo0g2WCIdy0yrIA1U1").onSnapshot(function(document) {
+        //     a1.innerHTML += document.data().text;
+        // });
+
+        // db.collection("Questions").doc("fPEa9NTRdd3qDOV7qH2N").onSnapshot(function(document) {
+        //     q2.innerHTML += document.data().text;
+        // });
+
+        // db.collection("answers").doc("IDRoIkSJegndOjeeF7az").onSnapshot(function(document) {
+        //     a2.innerHTML += document.data().text;
+        // });
+
+        // db.collection("answers").doc("r9srwrBHkUtnMimeeza0").onSnapshot(function(document) {
+        //     a3.innerHTML += document.data().text;
+        // });
+
+        var theFeed = document.getElementById("the-feed");
+        var theQuestions = db.collection("Questions");
+        var questionCounter = 1;
+
+        theQuestions.get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.data().text);
+                var newElt = document.createElement('div');
+                newElt.innerHTML = "Question " + questionCounter + ": " + doc.data().text;
+                newElt.setAttribute('id', 'q-'+doc.data().questionID);
+                theFeed.appendChild(newElt);
+                questionCounter ++;
+            });
         });
 
-        db.collection("answers").doc("2Xzo0g2WCIdy0yrIA1U1").onSnapshot(function(document) {
-            a1.innerHTML += document.data().text;
+        var theAnswers = db.collection("answers");
+        theAnswers.get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.data().text);
+                var newElt = document.createElement('div');
+                newElt.innerHTML = "–––––––––– Answer: " + doc.data().text;
+                var theirQuestion = document.getElementById("q-" + doc.data().questionID);
+                theirQuestion.appendChild(newElt);
+            });
         });
-
-        db.collection("Questions").doc("fPEa9NTRdd3qDOV7qH2N").onSnapshot(function(document) {
-            q2.innerHTML += document.data().text;
-        });
-
-        db.collection("answers").doc("IDRoIkSJegndOjeeF7az").onSnapshot(function(document) {
-            a2.innerHTML += document.data().text;
-        });
-
-        db.collection("answers").doc("r9srwrBHkUtnMimeeza0").onSnapshot(function(document) {
-            a3.innerHTML += document.data().text;
-        });
+   
 
       } //end of app initialization
 
