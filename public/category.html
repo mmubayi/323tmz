@@ -37,7 +37,7 @@
         <br>
           Name: <span id="name"></span>
         <p>
-          City:  <span id="city"></span>
+          This is a category page.
     </div>
 
     <div>
@@ -59,7 +59,6 @@
         var db = firebase.firestore();
         db.collection("categories").doc(vals[1]).onSnapshot(function (doc) {
             document.getElementById("name").innerHTML = doc.data().name;
-            document.getElementById("city").innerHTML = "Wellesley";
         });
 
         try {
