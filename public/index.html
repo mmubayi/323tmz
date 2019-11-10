@@ -17,54 +17,109 @@
     <script defer src="/__/firebase/init.js"></script>
 
     <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 560px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      body {background-color: #F5F8FA; color: rgba(0,0,0,0.87); 
+            font-family: Avenir, Helvetica, Arial, sans-serif; margin: 0; padding: 0;}
+      
+      #header {height: 52px; width: 100%; background-color: #7157D9;}
+      #header-zero{height:0px;}
+      #welcome-message{position: relative; color: white; font-size: 16px; font-weight: 400; 
+                      top: -52px; width:500px;}
+
+      #container {display: flex; flex-direction: row; margin: 0 auto; width: max-content}
+      #message { max-width: 650px;}
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { color: #ffa100; font-size: 22px; font-weight: 300; margin: 0 0 16px;}
       #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
       #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+
+      #question-text-field{font-family: Avenir, Helvetica, Arial, sans-serif; font-size: 14px;
+            color: #202B33; width:100%; border: 0px;}
+      #post-question {background-color: #48AFF0; color: white; font-size: 14px; margin-top: 16px;
+                  padding: 8px 16px; position: relative; left: 505px; border-radius: 3px;
+                  width: max-content;}
+
+      #category-container{margin-top: 8px; margin-right: 16px; width: 120px;}
+      .category {font-size: 14px; color: #202B33; margin-bottom: 8px; display: block;
+                text-decoration: none; padding: 8px;}
+      
+      .category:hover {background-color: #D8E1E8; border-radius: 3px;}
+
+      .question-text {color: #202B33; font-size: 18px; margin-bottom: 8px;}
+      .question-container{border: 1px solid #CED9E0; border-radius: 5px; padding: 16px; 
+                          margin-bottom: 16px; background-color: white; }
+
+      .category-container{display: flex; flex-direction: row}
+      .category-meta{margin-left: 8px; margin-top: 2px;}
+      .category-text {color: #202B33; font-size: 14px;}
+      .timestamp {color: #5C7080; font-size: 12px;}
+      .category-image {background-color: #669EFF; width: 40px; height: 40px; border-radius: 100px}
+      .answer-text {color: #202B33; font-size: 14px; margin-top: 8px;}
+
+      .divider {margin-top: 16px; position: relative; left: -16px; background-color: #CED9E0; height: 1px; 
+                width: 649px;}
+      .no-answer-container{display: flex; flex-direction: row;}
+      .no-answer-text{color:#202B33; font-size: 14px; margin-top: 16px;}
+      .no-answer-subtext{color: #5C7080; font-size:14px;}
+
+      .answer-cta{background-color: #48AFF0; color: white; font-size: 14px; margin-top: 16px;
+                  padding: 8px 16px; position: relative; left: 372px; border-radius: 3px;}
+
       @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body, #message { margin-top: 0; background-color: white; box-shadow: none; }
         body { border-top: 16px solid #ffa100; }
       }
     </style>
   </head>
   <body>
-    <div id="message">
-      <h1 style= "text-align: center">Want to tell your story?</h1>
-      <p style="text-align:center;">
-        <img src="./assets/img/goose.png" alt="goose logo" height="500">
-      </p>
-      <div> 
-        <h1 id="welcome-message"> Welcome. </h1>
-        
-        <h2 id="user1"> Users: <br> </h2>
-        
-        <h2 id="cats"> Categories: <br> </h2>
-
-        <p>Sample posts</p> 
-        <div id='the-feed'></div>
-        <!-- <h3 id="q1"> question #1:  </h3>
-        <h3 id="a1"> answer:  </h3> 
-        
-        <h3 id="q2"> question #2:  </h3>
-        <h3 id="a2"> answer:  </h3>
-        <h3 id="a3"> answer:  </h3> -->
-
-      <button id="sign-in" onclick="signIn()" hidden>
-          Sign-in
-        </button>
-      </div>
-      <div>
-      <button id="sign-out" onclick="signOut()" hidden>
-          Sign-out
-      </button>
-      
-      </div>
-      <p id="load">JavaScript</p>
+    <div id='header'>
     </div>
+    <div id='container'>
+        <div id='category-container'>
+          <div id='header-zero'>
+              <h1 id="welcome-message"> Welcome. </h1>
+          </div>  
+        </div>
+        <div id="message">
+          <!-- <h1 style= "text-align: center">Want to tell your story?</h1> -->
+          <p style="text-align:center;">
+            <!-- <img src="./assets/img/goose.png" alt="goose logo" height="500"> -->
+          </p>
+          <div> 
+    
+            <div class='question-container'>
+              <div class='question-text'>What is your question?</div>
+              <form>
+                <input type='text' name='question' placeholder='Tell me about the time...'id='question-text-field'>
+              </form>
+              <div id='post-question'>Ask question</div>
+            </div>
+            <div id='the-feed'></div>
+            
+            <h2 id="user1"> Users: <br> </h2>
+            
+            <h2 id="cats"> Categories: <br> </h2>
+    
+            <!-- <h3 id="q1"> question #1:  </h3>
+            <h3 id="a1"> answer:  </h3> 
+            
+            <h3 id="q2"> question #2:  </h3>
+            <h3 id="a2"> answer:  </h3>
+            <h3 id="a3"> answer:  </h3> -->
+    
+          <button id="sign-in" onclick="signIn()" hidden>
+              Sign-in
+            </button>
+          </div>
+          <div>
+          <button id="sign-out" onclick="signOut()" hidden>
+              Sign-out
+          </button>
+          
+          </div>
+          <p id="load">JavaScript</p>
+        </div>
+    </div>
+    
    
    <script>
 
@@ -114,7 +169,13 @@
         db.collection("categories").get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
-          cats.innerHTML += "<a href='category.html?id="+doc.id+"'>" + doc.data().name +"</a>"
+          var categoryContainer = document.getElementById('category-container');
+          var categoryLink = document.createElement('a');
+          categoryLink.setAttribute('class','category');
+          categoryLink.href = "category.html?id="+doc.id;
+          categoryLink.textContent = doc.data().name;
+          categoryContainer.appendChild(categoryLink);
+          //categoryContainer.innerHTML += "<a href='category.html?id="+doc.id+"'>" + doc.data().name +"</a>"
           });
         });
 
@@ -139,19 +200,73 @@
         //     a3.innerHTML += document.data().text;
         // });
 
+        // ----------------- updates feed with info from firebase -----------------------
         var theFeed = document.getElementById("the-feed");
         var theQuestions = db.collection("Questions");
-        var questionCounter = 1;
 
         theQuestions.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
-                console.log(doc.data().text);
-                var newElt = document.createElement('div');
-                newElt.innerHTML = "Question " + questionCounter + ": " + doc.data().text;
-                newElt.setAttribute('id', 'q-'+doc.data().questionID);
-                theFeed.appendChild(newElt);
-                questionCounter ++;
+                var questionContainer = document.createElement('div');
+                questionContainer.setAttribute('id', 'q-'+doc.data().questionID);
+                questionContainer.setAttribute('class','question-container');
+                theFeed.appendChild(questionContainer);
+
+                var questionText = document.createElement('div');
+                questionText.innerHTML = doc.data().text;
+                questionText.setAttribute('class','question-text');
+                questionContainer.appendChild(questionText);
+
+                var categoryContainer = document.createElement('div');
+                categoryContainer.setAttribute('class','category-container');
+                questionContainer.appendChild(categoryContainer);
+
+                var categoryImage = document.createElement('div');
+                categoryImage.setAttribute('class','category-image');
+                categoryContainer.appendChild(categoryImage);
+
+                var categoryMeta = document.createElement('div');
+                categoryMeta.setAttribute('class','category-meta');
+                categoryContainer.appendChild(categoryMeta);
+
+                var categoryText = document.createElement('div');
+                categoryText.innerHTML = doc.data().category;
+                categoryText.setAttribute('class','category-text');
+                categoryMeta.appendChild(categoryText);
+
+                var timestamp = document.createElement('div');
+                timestamp.innerHTML = doc.data().timestamp;
+                timestamp.setAttribute('class','timestamp');
+                categoryMeta.appendChild(timestamp);
+
+                if (doc.data().answers == 0){
+                  var divider = document.createElement('div');
+                  divider.setAttribute('class','divider');
+                  questionContainer.appendChild(divider);
+
+                  var noAnswerContainer = document.createElement('div');
+                  noAnswerContainer.setAttribute('class','no-answer-container');
+                  questionContainer.appendChild(noAnswerContainer);
+
+                  var textContainer = document.createElement('div');
+                  textContainer.setAttribute('class','answer-text-container');
+                  noAnswerContainer.appendChild(textContainer);
+
+                  var answers = document.createElement('div');
+                  answers.innerHTML = "No stories yet";
+                  answers.setAttribute('class','no-answer-text');
+                  textContainer.appendChild(answers);
+
+                  var subText = document.createElement('div');
+                  subText.innerHTML = "Be the first to write a story!";
+                  subText.setAttribute('class','no-answer-subtext');
+                  textContainer.appendChild(subText);
+
+                  var answerCta = document.createElement('div');
+                  answerCta.innerHTML = "Answer";
+                  answerCta.setAttribute('class', 'answer-cta');
+                  noAnswerContainer.appendChild(answerCta);
+                }
             });
         });
 
@@ -160,15 +275,104 @@
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.data().text);
-                var newElt = document.createElement('div');
-                newElt.innerHTML = "–––––––––– Answer: " + doc.data().text;
+                var answers = document.createElement('div');
+                answers.innerHTML = doc.data().text;
                 var theirQuestion = document.getElementById("q-" + doc.data().questionID);
-                theirQuestion.appendChild(newElt);
+                answers.setAttribute('class','answer-text');
+                theirQuestion.appendChild(answers);
             });
         });
    
+        document.getElementById("post-question").addEventListener("click", postQuestion);
+
 
       } //end of app initialization
+
+      function postQuestion () {
+        var db = firebase.firestore();
+        var theQuestion = document.getElementById('question-text-field').value;
+        var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
+        db.collection('Questions').add({
+          text: theQuestion,
+          answers: 0,
+          category: "Politics",
+          questionID: null,
+          timestamp: theTimestamp
+        })
+        .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+          db.collection('Questions').doc(docRef.id).update({questionID: docRef.id});
+
+          document.getElementById('question-text-field').value = '';
+
+          var theFeed = document.getElementById('the-feed');
+          var questionContainer = document.createElement('div');
+
+                questionContainer.setAttribute('id', 'q-'+docRef.id);
+                questionContainer.setAttribute('class','question-container');
+                theFeed.prepend(questionContainer);
+
+                var questionText = document.createElement('div');
+                questionText.innerHTML = theQuestion;
+                questionText.setAttribute('class','question-text');
+                questionContainer.appendChild(questionText);
+
+                var categoryContainer = document.createElement('div');
+                categoryContainer.setAttribute('class','category-container');
+                questionContainer.appendChild(categoryContainer);
+
+                var categoryImage = document.createElement('div');
+                categoryImage.setAttribute('class','category-image');
+                categoryContainer.appendChild(categoryImage);
+
+                var categoryMeta = document.createElement('div');
+                categoryMeta.setAttribute('class','category-meta');
+                categoryContainer.appendChild(categoryMeta);
+
+                var categoryText = document.createElement('div');
+                categoryText.innerHTML = 'Politics';
+                categoryText.setAttribute('class','category-text');
+                categoryMeta.appendChild(categoryText);
+
+                var timestamp = document.createElement('div');
+                timestamp.innerHTML = theTimestamp;
+                timestamp.setAttribute('class','timestamp');
+                categoryMeta.appendChild(timestamp);
+
+                
+                  var divider = document.createElement('div');
+                  divider.setAttribute('class','divider');
+                  questionContainer.appendChild(divider);
+
+                  var noAnswerContainer = document.createElement('div');
+                  noAnswerContainer.setAttribute('class','no-answer-container');
+                  questionContainer.appendChild(noAnswerContainer);
+
+                  var textContainer = document.createElement('div');
+                  textContainer.setAttribute('class','answer-text-container');
+                  noAnswerContainer.appendChild(textContainer);
+
+                  var answers = document.createElement('div');
+                  answers.innerHTML = "No stories yet";
+                  answers.setAttribute('class','no-answer-text');
+                  textContainer.appendChild(answers);
+
+                  var subText = document.createElement('div');
+                  subText.innerHTML = "Be the first to write a story!";
+                  subText.setAttribute('class','no-answer-subtext');
+                  textContainer.appendChild(subText);
+
+                  var answerCta = document.createElement('div');
+                  answerCta.innerHTML = "Answer";
+                  answerCta.setAttribute('class', 'answer-cta');
+                  noAnswerContainer.appendChild(answerCta);
+                
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        });
+
+      }
 
 
     function signIn() {
