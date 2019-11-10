@@ -202,7 +202,7 @@
 
         // ----------------- updates feed with info from firebase -----------------------
         var theFeed = document.getElementById("the-feed");
-        var theQuestions = db.collection("Questions");
+        var theQuestions = db.collection("Questions").orderBy('timestamp', 'desc');
 
         theQuestions.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
@@ -235,7 +235,9 @@
                 categoryMeta.appendChild(categoryText);
 
                 var timestamp = document.createElement('div');
-                timestamp.innerHTML = doc.data().timestamp;
+                var theTime = doc.data().timestamp.toDate();
+                timestamp.innerHTML = timestampCalc(theTime);
+                
                 timestamp.setAttribute('class','timestamp');
                 categoryMeta.appendChild(timestamp);
 
@@ -274,7 +276,6 @@
         theAnswers.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
-                console.log(doc.data().text);
                 var answers = document.createElement('div');
                 answers.innerHTML = doc.data().text;
                 var theirQuestion = document.getElementById("q-" + doc.data().questionID);
@@ -287,11 +288,40 @@
 
 
       } //end of app initialization
+      
+      function timestampCalc (date) {
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+                var interval = Math.floor(seconds / 31536000);
+
+                if (interval > 1) {
+                  return interval + " years ago";
+                }
+                interval = Math.floor(seconds / 2592000);
+                if (interval > 1) {
+                  return interval + " months ago";
+                }
+                interval = Math.floor(seconds / 86400);
+                if (interval > 1) {
+                  return interval + " days ago";
+                }
+                interval = Math.floor(seconds / 3600);
+                if (interval > 1) {
+                  return interval + " hours ago";
+                }
+                interval = Math.floor(seconds / 60);
+                if (interval > 1) {
+                  return interval + " minutes ago";
+                }
+                return interval + " seconds ago";
+      }
 
       function postQuestion () {
         var db = firebase.firestore();
         var theQuestion = document.getElementById('question-text-field').value;
-        var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
+
+        if (theQuestion != '') {
+          var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
         db.collection('Questions').add({
           text: theQuestion,
           answers: 0,
@@ -367,10 +397,11 @@
                   answerCta.setAttribute('class', 'answer-cta');
                   noAnswerContainer.appendChild(answerCta);
                 
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-        });
+          })
+          .catch(function(error) {
+              console.error("Error adding document: ", error);
+          });
+        }
 
       }
 
