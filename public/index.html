@@ -268,11 +268,71 @@
                   answerCta.innerHTML = "Answer";
                   answerCta.setAttribute('class', 'answer-cta');
                   noAnswerContainer.appendChild(answerCta);
+                  
+                  var answerForm = document.createElement('form');
+                  questionContainer.appendChild(answerForm);
+
+                  var answerInputField = document.createElement('input');
+                  answerInputField.setAttribute('type', 'text');
+                  answerInputField.setAttribute('class', 'answer-input-field')
+                  answerForm.appendChild(answerInputField);
+
+                  answerCta.addEventListener('click', function () {
+                    var theirText = document.getElementById('q-'+doc.data().questionID)
+                                            .getElementsByClassName('answer-input-field')[0].value;
+                    console.log(theirText); 
+                    var answerDiv = document.createElement('div');
+                    answerDiv.innerHTML = theirText;
+                    answerDiv.setAttribute('class','answer-text');
+                    document.getElementById('q-'+doc.data().questionID).appendChild(answerDiv);
+
+                    answerCta.remove();
+                    answerForm.remove();
+                    subText.remove();
+                    answers.remove();
+                    textContainer.remove();
+                    divider.remove();
+                    noAnswerContainer.remove();
+
+                    var db = firebase.firestore();
+                    var theQuestion = doc.data().questionID;
+
+                    db.collection('answers').add({
+                      text: theirText,
+                      questionID: theQuestion,
+                      timestamp: theTimestamp
+                    })
+                    .then(function(docRef) {
+                      console.log("Document written with ID: ", docRef.id);
+                      var docRef = db.collection("Questions").doc(theQuestion);
+
+                      var answerCount = 0;
+                      docRef.get().then(function(doc) {
+                          if (doc.exists) {
+                            answerCount = doc.data().answers;
+                          } else {
+                              // doc.data() will be undefined in this case
+                              console.log("No such document!");
+                          }
+                      }).catch(function(error) {
+                          console.log("Error getting document:", error);
+                      });
+                      db.collection('Questions').doc(theQuestion).update({answers: answerCount + 1})
+
+                    })
+                    .catch(function(error) {
+                        console.error("Error adding document: ", error);
+                    });
+
+
+
+                  })
                 }
             });
         });
 
         var theAnswers = db.collection("answers");
+        var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
         theAnswers.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
@@ -286,8 +346,8 @@
    
         document.getElementById("post-question").addEventListener("click", postQuestion);
 
-
       } //end of app initialization
+
       
       function timestampCalc (date) {
         var seconds = Math.floor((new Date() - date) / 1000);
@@ -365,7 +425,7 @@
                 categoryMeta.appendChild(categoryText);
 
                 var timestamp = document.createElement('div');
-                timestamp.innerHTML = theTimestamp;
+                timestamp.innerHTML = 'Now';
                 timestamp.setAttribute('class','timestamp');
                 categoryMeta.appendChild(timestamp);
 
@@ -404,6 +464,12 @@
         }
 
       }
+
+    function addAnswer(qid){
+      var theQuestion = document.getElementById(qid);
+      var theAnswerText = theQuestion.getElementsByClassName('answer-input-field').value;
+      console.log('the answer: ' + theAnswerText);
+    }
 
 
     function signIn() {
