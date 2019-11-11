@@ -136,7 +136,7 @@
         try {
           let app = firebase.app();
           firebase.auth().onAuthStateChanged(authStateObserver);
-          initializeApp(); 
+          initializeApp(null); 
           let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
           document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
@@ -146,7 +146,7 @@
       });
 
 
-      function initializeApp(){
+      function initializeApp(overallCategory){
         //get the HTML element to print names
         var per1 = document.getElementById("user1");
         
@@ -168,14 +168,20 @@
 
         db.collection("categories").get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-          var categoryContainer = document.getElementById('category-container');
-          var categoryLink = document.createElement('a');
-          categoryLink.setAttribute('class','category');
-          categoryLink.href = "category.html?id="+doc.id;
-          categoryLink.textContent = doc.data().name;
-          categoryContainer.appendChild(categoryLink);
-          //categoryContainer.innerHTML += "<a href='category.html?id="+doc.id+"'>" + doc.data().name +"</a>"
+            // doc.data() is never undefined for query doc snapshots
+            var categoryContainer = document.getElementById('category-container');
+            var categoryLink = document.createElement('div');
+            categoryLink.setAttribute('class','category');
+            categoryLink.textContent = doc.data().name;
+            categoryContainer.appendChild(categoryLink);
+            categoryLink.addEventListener('click', function () {
+              document.getElementById('the-feed').innerHTML = '';
+              document.getElementById('category-container').innerHTML = '';
+              initializeApp(doc.id);
+              console.log(doc.id);
+            })
+          
+
           });
         });
 
@@ -202,7 +208,13 @@
 
         // ----------------- updates feed with info from firebase -----------------------
         var theFeed = document.getElementById("the-feed");
-        var theQuestions = db.collection("Questions").orderBy('timestamp', 'desc');
+
+        if (overallCategory){
+          var theQuestions = db.collection("Questions").where('category','==','Politics');
+        }
+        else {
+          var theQuestions = db.collection("Questions").orderBy('timestamp','desc');
+        }
 
         theQuestions.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
@@ -300,7 +312,8 @@
                     db.collection('answers').add({
                       text: theirText,
                       questionID: theQuestion,
-                      timestamp: theTimestamp
+                      timestamp: theTimestamp,
+                      category: 'Politics'
                     })
                     .then(function(docRef) {
                       console.log("Document written with ID: ", docRef.id);
@@ -324,14 +337,17 @@
                         console.error("Error adding document: ", error);
                     });
 
-
-
                   })
                 }
             });
         });
 
-        var theAnswers = db.collection("answers");
+        if (overallCategory){
+          var theAnswers = db.collection("answers").where('category','==','Politics');
+        }
+        else {
+          var theAnswers = db.collection("answers");
+        }
         var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
         theAnswers.get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
