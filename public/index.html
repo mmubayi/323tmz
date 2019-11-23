@@ -20,13 +20,13 @@
       body {background-color: #F5F8FA; color: rgba(0,0,0,0.87); 
             font-family: Avenir, Helvetica, Arial, sans-serif; margin: 0; padding: 0;}
       
-      #header {height: 52px; width: 100%; background-color: #7157D9;}
+      #header {position: absolute; top:-2px; display:flex; flex-direction: row}
       #header-zero{height:0px;}
-      #welcome-message{position: relative; color: white; font-size: 16px; font-weight: 400; 
-                      top: -52px; width:500px;}
-
-      #container {display: flex; flex-direction: row; margin: 0 auto; width: max-content}
-      #message { max-width: 650px;}
+      #welcome-message{position: absolute; color: white; font-size: 16px; font-weight: 400;
+                      width:500px; padding-left: 10px; padding-top:10px}
+      #buttons {padding-left: 500px;}
+      #container {margin: 0 auto; width: max-content; flex-direction: row}
+      #message { display: flex; flex-direction: row; max-width: 650px;}
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { color: #ffa100; font-size: 22px; font-weight: 300; margin: 0 0 16px;}
       #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
@@ -39,11 +39,12 @@
                   width: max-content;}
 
       #category-container{margin-top: 8px; margin-right: 16px; width: 120px;}
+      #content{display: flex; flex-direction: row}
       .category {font-size: 14px; color: #202B33; margin-bottom: 8px; display: block;
                 text-decoration: none; padding: 8px;}
       
       .category:hover {background-color: #D8E1E8; border-radius: 3px;}
-
+      .header {height: 52px; background-color: #7157D9; }
       .question-text {color: #202B33; font-size: 18px; margin-bottom: 8px;}
       .question-container{border: 1px solid #CED9E0; border-radius: 5px; padding: 16px; 
                           margin-bottom: 16px; background-color: white; }
@@ -71,13 +72,35 @@
     </style>
   </head>
   <body>
-    <div id='header'>
+    <div class="header">
+
     </div>
+    
     <div id='container'>
-        <div id='category-container'>
-          <div id='header-zero'>
-              <h1 id="welcome-message"> Welcome. </h1>
-          </div>  
+        <div class='header' id='header'>
+            <div id='logo'>
+              <img src="assets/visuals/TapestryLogo-02.png" style="width:50px">
+            </div>
+            <div id='header-zero'>
+      
+                <h1 id="welcome-message"> Welcome. </h1>
+            </div>  
+            <div id='buttons'>
+            <button id="sign-in" onclick="signIn()" hidden>
+                Sign-in
+              </button>
+            </div>
+            <div>
+            <button id="sign-out" onclick="signOut()" hidden>
+                Sign-out
+            </button>
+            
+            </div>
+          </div>
+          <p></p>
+        <div id='content'> 
+          <div id='category-container'>
+         
         </div>
         <div id="message">
           <!-- <h1 style= "text-align: center">Want to tell your story?</h1> -->
@@ -91,33 +114,16 @@
               <form>
                 <input type='text' name='question' placeholder='Tell me about the time...'id='question-text-field'>
               </form>
+              <div id='character-count'> chars: </div>
+              <div id='alert'></div>
               <div id='post-question'>Ask question</div>
             </div>
             <div id='the-feed'></div>
-            
-            <h2 id="user1"> Users: <br> </h2>
-            
-            <h2 id="cats"> Categories: <br> </h2>
     
-            <!-- <h3 id="q1"> question #1:  </h3>
-            <h3 id="a1"> answer:  </h3> 
-            
-            <h3 id="q2"> question #2:  </h3>
-            <h3 id="a2"> answer:  </h3>
-            <h3 id="a3"> answer:  </h3> -->
-    
-          <button id="sign-in" onclick="signIn()" hidden>
-              Sign-in
-            </button>
           </div>
-          <div>
-          <button id="sign-out" onclick="signOut()" hidden>
-              Sign-out
-          </button>
-          
-          </div>
-          <p id="load">JavaScript</p>
+          <!-- <p id="load">JavaScript</p> -->
         </div>
+      </div>
     </div>
     
    
@@ -138,17 +144,16 @@
           firebase.auth().onAuthStateChanged(authStateObserver);
           initializeApp(null); 
           let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+         // document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
           console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+          //document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
         }
       });
 
 
       function initializeApp(overallCategory){
         //get the HTML element to print names
-        var per1 = document.getElementById("user1");
         
         // var q1 = document.getElementById("q1");
         // var q2 = document.getElementById("q2");
@@ -159,12 +164,12 @@
         var db = firebase.firestore();
       
         // SAMPLE USERS
-        db.collection("users").get().then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-            per1.innerHTML += doc.data().name + "<br>";
-          });
-        });
+        // db.collection("users").get().then(function(querySnapshot) {
+        //   querySnapshot.forEach(function(doc) {
+        //   // doc.data() is never undefined for query doc snapshots
+        //     per1.innerHTML += doc.data().name + "<br>";
+        //   });
+        // });
 
         db.collection("categories").get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
@@ -173,38 +178,31 @@
             var categoryLink = document.createElement('div');
             categoryLink.setAttribute('class','category');
             categoryLink.textContent = doc.data().name;
+            // might have to put on img as opposed to container
             categoryContainer.appendChild(categoryLink);
+            //var categoryImg = document.createElement('img');
+            //categoryImg.setAttribute('src', doc.data().link );
+            //categoryImg.setAttribute('src', doc.data().link );
+            //categoryImg.style.height = '45px';
+            //categoryImg.style.width = '120px';
+            //categoryImg.style.paddingLeft = '10px';
+            //categoryContainer.appendChild(categoryImg);
+            // categoryContainer.addEventListener('click', function () {
+            //   document.getElementById('the-feed').innerHTML = '';
+            //   document.getElementById('category-container').innerHTML = '';
+            //   initializeApp(doc.id);
+            //   console.log(doc.id);
+            // })
             categoryLink.addEventListener('click', function () {
               document.getElementById('the-feed').innerHTML = '';
               document.getElementById('category-container').innerHTML = '';
               initializeApp(doc.id);
               console.log(doc.id);
             })
-          
 
           });
         });
 
-        // SAMPLE POSTS
-        // db.collection("Questions").doc("UOoiqSn900rffNDwSe1P").onSnapshot(function(document) {
-        //     q1.innerHTML += document.data().text;
-        // });
-
-        // db.collection("answers").doc("2Xzo0g2WCIdy0yrIA1U1").onSnapshot(function(document) {
-        //     a1.innerHTML += document.data().text;
-        // });
-
-        // db.collection("Questions").doc("fPEa9NTRdd3qDOV7qH2N").onSnapshot(function(document) {
-        //     q2.innerHTML += document.data().text;
-        // });
-
-        // db.collection("answers").doc("IDRoIkSJegndOjeeF7az").onSnapshot(function(document) {
-        //     a2.innerHTML += document.data().text;
-        // });
-
-        // db.collection("answers").doc("r9srwrBHkUtnMimeeza0").onSnapshot(function(document) {
-        //     a3.innerHTML += document.data().text;
-        // });
 
         // ----------------- updates feed with info from firebase -----------------------
         var theFeed = document.getElementById("the-feed");
@@ -287,7 +285,27 @@
                   var answerInputField = document.createElement('input');
                   answerInputField.setAttribute('type', 'text');
                   answerInputField.setAttribute('class', 'answer-input-field')
+
+                  var charsCount = document.createElement('div');
+                  charsCount.innerHTML = '';
+                  charsCount.setAttribute('class', 'chars-count'); 
+                 
+                  answerInputField.addEventListener('keyup', function() {
+                    charsCount.innerHTML = this.value.length;
+                    console.log(this.value.length);
+                    if(this.value.length < minLength) {
+                      alert.style.color = 'red';
+                      alert.innerHTML = 'Please write more.';
+                    }
+                    else {
+                      alert.style.color = 'green';
+                      alert.innerHTML = 'Great answer.';
+                    }
+                  });
+                  
                   answerForm.appendChild(answerInputField);
+                  noAnswerContainer.appendChild(charsCount);
+                    
 
                   answerCta.addEventListener('click', function () {
                     var theirText = document.getElementById('q-'+doc.data().questionID)
@@ -342,6 +360,7 @@
             });
         });
 
+
         if (overallCategory){
           var theAnswers = db.collection("answers").where('category','==','Politics');
         }
@@ -359,6 +378,23 @@
                 theirQuestion.appendChild(answers);
             });
         });
+
+        //var ques = document.getElementById('question-text-field').value;
+        var minLength = 280;
+        var chars = document.getElementById('character-count'); 
+        var alert = document.getElementById('alert');
+        document.getElementById('question-text-field').onkeyup = function() {
+          chars.innerHTML = this.value.length;
+          console.log(this.value.length);
+          if(this.value.length < minLength) {
+            alert.style.color = 'red';
+            alert.innerHTML = 'Please write more.';
+          }
+          else {
+            alert.style.color = 'green';
+            alert.innerHTML = 'Great question.';
+          }
+        }
    
         document.getElementById("post-question").addEventListener("click", postQuestion);
 
@@ -395,6 +431,18 @@
       function postQuestion () {
         var db = firebase.firestore();
         var theQuestion = document.getElementById('question-text-field').value;
+        var minLength = 280;
+        var chars = document.getElementById('chars'); 
+        var alert = document.getElementById('alert');
+        document.getElementById('question-text-field').onkeyup = function() {
+          chars.innerHTML = theQuestion.length;
+          if(!questionLength(theQuestion)) {
+            alert.innerHTML = 'too short';
+          }
+          else {
+            alert.innerHTML = '';
+          }
+        }
 
         if (theQuestion != '') {
           var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
@@ -480,6 +528,9 @@
         }
 
       }
+
+
+   
 
     function addAnswer(qid){
       var theQuestion = document.getElementById(qid);
