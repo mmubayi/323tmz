@@ -20,31 +20,32 @@
       body {background-color: #F5F8FA; color: rgba(0,0,0,0.87); 
             font-family: Avenir, Helvetica, Arial, sans-serif; margin: 0; padding: 0;}
       
-      #header {position: absolute; top:-2px; display:flex; flex-direction: row}
+      #header {position: fixed; top:-2px; display:flex; flex-direction: row; height: 52px;
+              width: 100%; z-index: 5;}
       #header-zero{height:0px;}
       #welcome-message{position: absolute; color: white; font-size: 16px; font-weight: 400;
                       width:500px; padding-left: 10px; padding-top:10px}
       #buttons {padding-left: 500px;}
       #container {margin: 0 auto; width: max-content; flex-direction: row}
-      #message { display: flex; flex-direction: row; max-width: 650px;}
+      #message { display: block; max-width: 650px; margin-top: 66px;}
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { color: #ffa100; font-size: 22px; font-weight: 300; margin: 0 0 16px;}
       #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
       #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
 
       #question-text-field{font-family: Avenir, Helvetica, Arial, sans-serif; font-size: 14px;
-            color: #202B33; width:100%; border: 0px;}
+            color: #202B33; width:100%; border: 0px; outline: none;}
       #post-question {background-color: #48AFF0; color: white; font-size: 14px; margin-top: 16px;
                   padding: 8px 16px; position: relative; left: 505px; border-radius: 3px;
-                  width: max-content;}
+                  width: max-content; cursor: pointer;}
 
-      #category-container{margin-top: 8px; margin-right: 16px; width: 120px;}
+      #category-container{margin-top: 8px; margin-right: 16px; width: 120px; margin-top: 66px;}
       #content{display: flex; flex-direction: row}
       .category {font-size: 14px; color: #202B33; margin-bottom: 8px; display: block;
                 text-decoration: none; padding: 8px;}
       
       .category:hover {background-color: #D8E1E8; border-radius: 3px;}
-      .header {height: 52px; background-color: #7157D9; }
+      .header {height: 52px; background-color: #7157D9; position: fixed;}
       .question-text {color: #202B33; font-size: 18px; margin-bottom: 8px;}
       .question-container{border: 1px solid #CED9E0; border-radius: 5px; padding: 16px; 
                           margin-bottom: 16px; background-color: white; }
@@ -53,7 +54,8 @@
       .category-meta{margin-left: 8px; margin-top: 2px;}
       .category-text {color: #202B33; font-size: 14px;}
       .timestamp {color: #5C7080; font-size: 12px;}
-      .category-image {background-color: #669EFF; width: 40px; height: 40px; border-radius: 100px}
+      .category-image { width: 40px; height: 40px; 
+                        background-size: cover;}
       .answer-text {color: #202B33; font-size: 14px; margin-top: 8px;}
 
       .divider {margin-top: 16px; position: relative; left: -16px; background-color: #CED9E0; height: 1px; 
@@ -63,7 +65,83 @@
       .no-answer-subtext{color: #5C7080; font-size:14px;}
 
       .answer-cta{background-color: #48AFF0; color: white; font-size: 14px; margin-top: 16px;
-                  padding: 8px 16px; position: relative; left: 372px; border-radius: 3px;}
+                  padding: 8px 16px; position: relative; left: 372px; border-radius: 3px;
+                  cursor: pointer;}
+
+      .composer-cta-enabled{background-color: #48AFF0; color: white; font-size: 14px;
+                  padding: 8px 16px; border-radius: 3px; position: absolute; left: 542px;
+                  width:max-content; margin-bottom: 16px; display: inline; cursor: pointer;
+      }
+      .composer-cta-disabled{background-color: #E1E8EC; color: #9EABB5; font-size: 14px; 
+                  padding: 8px 16px; border-radius: 3px; position: absolute; left: 542px;
+                  width: max-content; margin-bottom: 16px; display: inline;
+      }
+
+      #composer-container {
+        height: 0px; display: none;
+      }
+
+      .close-composer {
+        height: 20px; width: 20px; margin-bottom: 16px; fill: #394B59; position: relative;
+        float: right; cursor: pointer;
+      }
+
+      .blackout {position:fixed;
+      top:0;
+      left:0;
+      background:rgba(0,0,0,0.6);
+      z-index:5;
+      width:100%;
+      height:100%;
+      }
+
+      .answer-composer{ position: relative; margin: auto; top: 40px; z-index: 6;
+        width: 620px; height: max-content; background-color: white; border-radius: 5px;
+        height: 276px; padding: 16px;
+      }
+
+      .question-composer{ position: relative; margin: auto; top: 40px; z-index: 6;
+        width: 620px; height: max-content; background-color: white; border-radius: 5px;
+        height: 276px; padding: 16px; 
+      }
+
+      .answer-input-field {
+        margin-top: 8px; width: 616px; height: 10em; color: #202B33; font-size: 14px; 
+        border: 0px; outline: none; overflow: scroll; margin-bottom: 8px;
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+      }
+
+      .answer-recap {
+        font-size: 18px; margin-bottom: 8px;
+      }
+
+      .chars-count {
+        padding: 16px; padding-left: 0px; display: inline; margin-bottom: 18px;
+      }
+
+      #question-input-field{
+        margin-top: 16px; width: 616px; height: 1em; color: #202B33; font-size: 14px; 
+        border: 0px; outline: none; overflow: scroll; margin-bottom: 8px;
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+      }
+
+      .prompt-points{
+        margin-bottom: 4px; font-size: 14px; color: #5C7080; padding-left: 16px;
+      }
+
+      .question-comp-title{
+        font-size: 18px;
+      }
+
+      #ask-question{
+        background-color: #48AFF0; color: white; font-size: 14px; 
+        padding: 8px 16px; border-radius: 3px; position: relative; float: right;
+        width: max-content; margin-bottom: 16px;
+      }
+
+      #sign-in{
+        position: relative; float: right;
+      }
 
       @media (max-width: 600px) {
         body, #message { margin-top: 0; background-color: white; box-shadow: none; }
@@ -72,9 +150,19 @@
     </style>
   </head>
   <body>
-    <div class="header">
-
+    <div class="question">
+      <div id='composer-container'>
+        <div class='blackout'></div>
+        <div class='question-composer'>
+        <div class='question-comp-title'>What's your question?</div>
+          <form>
+            <input type='text' id='question-input-field' autofocus='true' placeholder="Tell me a story about the time...">
+          </form>
+          <div id='ask-question'>Ask Question</div>
+        </div>
+      </div>
     </div>
+    <div class="header"></div>
     
     <div id='container'>
         <div class='header' id='header'>
@@ -82,13 +170,13 @@
               <img src="assets/visuals/TapestryLogo-02.png" style="width:50px">
             </div>
             <div id='header-zero'>
-      
                 <h1 id="welcome-message"> Welcome. </h1>
+                <button id="sign-in" onclick="signIn()" hidden>
+                    Sign-in
+                  </button>
+                  <div id='post-question'>Ask question</div>
             </div>  
             <div id='buttons'>
-            <button id="sign-in" onclick="signIn()" hidden>
-                Sign-in
-              </button>
             </div>
             <div>
             <button id="sign-out" onclick="signOut()" hidden>
@@ -97,27 +185,13 @@
             
             </div>
           </div>
-          <p></p>
         <div id='content'> 
           <div id='category-container'>
          
         </div>
         <div id="message">
           <!-- <h1 style= "text-align: center">Want to tell your story?</h1> -->
-          <p style="text-align:center;">
-            <!-- <img src="./assets/img/goose.png" alt="goose logo" height="500"> -->
-          </p>
           <div> 
-    
-            <div class='question-container'>
-              <div class='question-text'>What is your question?</div>
-              <form>
-                <input type='text' name='question' placeholder='Tell me about the time...'id='question-text-field'>
-              </form>
-              <div id='character-count'> chars: </div>
-              <div id='alert'></div>
-              <div id='post-question'>Ask question</div>
-            </div>
             <div id='the-feed'></div>
     
           </div>
@@ -200,11 +274,20 @@
               console.log(doc.id);
             })
 
+
           });
         });
 
+        var postQuestionCta = document.getElementById('post-question');
+        postQuestionCta.addEventListener('click', function () {
+          document.getElementById('composer-container').style.display = 'block';
+        })
+
 
         // ----------------- updates feed with info from firebase -----------------------
+        
+
+        
         var theFeed = document.getElementById("the-feed");
 
         if (overallCategory){
@@ -234,6 +317,25 @@
                 var categoryImage = document.createElement('div');
                 categoryImage.setAttribute('class','category-image');
                 categoryContainer.appendChild(categoryImage);
+                categoryImage.style.backgroundImage = "url('/assets/visuals/categories.png')";
+                if (doc.data().category == "Education"){
+                  categoryImage.style.backgroundPosition = '0px 0px';
+                }
+                else if (doc.data().category == "Identity"){
+                  categoryImage.style.backgroundPosition = '0px -81px';
+                }
+                else if (doc.data().category == "Politics"){
+                  categoryImage.style.backgroundPosition = '0px -42px';
+                }
+                else if (doc.data().category == "Health"){
+                  categoryImage.style.backgroundPosition = '0px -118px';
+                }
+                else if (doc.data().category == "Entertainment"){
+                  categoryImage.style.backgroundPosition = '0px -160px';
+                }
+                else {
+                  categoryImage.style.backgroundPosition = '0px -200px';
+                }
 
                 var categoryMeta = document.createElement('div');
                 categoryMeta.setAttribute('class','category-meta');
@@ -278,82 +380,180 @@
                   answerCta.innerHTML = "Answer";
                   answerCta.setAttribute('class', 'answer-cta');
                   noAnswerContainer.appendChild(answerCta);
-                  
-                  var answerForm = document.createElement('form');
-                  questionContainer.appendChild(answerForm);
-
-                  var answerInputField = document.createElement('input');
-                  answerInputField.setAttribute('type', 'text');
-                  answerInputField.setAttribute('class', 'answer-input-field')
-
-                  var charsCount = document.createElement('div');
-                  charsCount.innerHTML = '';
-                  charsCount.setAttribute('class', 'chars-count'); 
-                 
-                  answerInputField.addEventListener('keyup', function() {
-                    charsCount.innerHTML = this.value.length;
-                    console.log(this.value.length);
-                    if(this.value.length < minLength) {
-                      alert.style.color = 'red';
-                      alert.innerHTML = 'Please write more.';
-                    }
-                    else {
-                      alert.style.color = 'green';
-                      alert.innerHTML = 'Great answer.';
-                    }
-                  });
-                  
-                  answerForm.appendChild(answerInputField);
-                  noAnswerContainer.appendChild(charsCount);
                     
 
                   answerCta.addEventListener('click', function () {
-                    var theirText = document.getElementById('q-'+doc.data().questionID)
-                                            .getElementsByClassName('answer-input-field')[0].value;
-                    console.log(theirText); 
-                    var answerDiv = document.createElement('div');
-                    answerDiv.innerHTML = theirText;
-                    answerDiv.setAttribute('class','answer-text');
-                    document.getElementById('q-'+doc.data().questionID).appendChild(answerDiv);
 
-                    answerCta.remove();
-                    answerForm.remove();
-                    subText.remove();
-                    answers.remove();
-                    textContainer.remove();
-                    divider.remove();
-                    noAnswerContainer.remove();
+                    var answerCompBackground = document.createElement('div');
+                    answerCompBackground.setAttribute('class','blackout');
+                    var theDocument = document.getElementsByTagName('body')[0];
+                    theDocument.prepend(answerCompBackground);
 
-                    var db = firebase.firestore();
-                    var theQuestion = doc.data().questionID;
+                    var composerContainer = document.createElement('div');
+                    composerContainer.setAttribute('class','composer-container');
+                    theDocument.prepend(composerContainer);
 
-                    db.collection('answers').add({
-                      text: theirText,
-                      questionID: theQuestion,
-                      timestamp: theTimestamp,
-                      category: 'Politics'
+                    var answerComposer = document.createElement('div');
+                    answerComposer.setAttribute('class','answer-composer');
+                    composerContainer.appendChild(answerComposer);
+
+                    var closeComposer = document.createElement('img');
+                    closeComposer.src = '/assets/visuals/cross.svg';
+                    closeComposer.setAttribute('class','close-composer');
+                    answerComposer.appendChild(closeComposer);
+
+                    closeComposer.addEventListener('click', function () {
+                      composerContainer.remove();
+                      answerCompBackground.remove();
                     })
-                    .then(function(docRef) {
-                      console.log("Document written with ID: ", docRef.id);
-                      var docRef = db.collection("Questions").doc(theQuestion);
 
-                      var answerCount = 0;
-                      docRef.get().then(function(doc) {
-                          if (doc.exists) {
-                            answerCount = doc.data().answers;
-                          } else {
-                              // doc.data() will be undefined in this case
-                              console.log("No such document!");
-                          }
-                      }).catch(function(error) {
-                          console.log("Error getting document:", error);
-                      });
-                      db.collection('Questions').doc(theQuestion).update({answers: answerCount + 1})
+                    var initialQuestion = document.getElementById('q-'+doc.data().questionID)
+                                            .getElementsByClassName('question-text')[0].textContent;
 
-                    })
-                    .catch(function(error) {
-                        console.error("Error adding document: ", error);
+                    var answerRecap = document.createElement('div');
+                    answerRecap.setAttribute('class','answer-recap');
+                    answerRecap.textContent = initialQuestion;
+                    answerComposer.appendChild(answerRecap);
+
+                    var categoryContainer = document.createElement('div');
+                    categoryContainer.setAttribute('class','category-container');
+                    answerComposer.appendChild(categoryContainer);
+
+                    var categoryImage = document.createElement('div');
+                    categoryImage.setAttribute('class','category-image');
+                    categoryContainer.appendChild(categoryImage);
+                    categoryImage.style.backgroundImage = "url('/assets/visuals/categories.png')";
+                    if (doc.data().category == "Education"){
+                      categoryImage.style.backgroundPosition = '0px 0px';
+                    }
+                    else if (doc.data().category == "Identity"){
+                      categoryImage.style.backgroundPosition = '0px -81px';
+                    }
+                    else if (doc.data().category == "Politics"){
+                      categoryImage.style.backgroundPosition = '0px -42px';
+                    }
+                    else if (doc.data().category == "Health"){
+                      categoryImage.style.backgroundPosition = '0px -118px';
+                    }
+                    else if (doc.data().category == "Entertainment"){
+                      categoryImage.style.backgroundPosition = '0px -160px';
+                    }
+                    else {
+                      categoryImage.style.backgroundPosition = '0px -200px';
+                    }
+
+                    var categoryMeta = document.createElement('div');
+                    categoryMeta.setAttribute('class','category-meta');
+                    categoryContainer.appendChild(categoryMeta);
+
+                    var categoryText = document.createElement('div');
+                    categoryText.innerHTML = doc.data().category;
+                    categoryText.setAttribute('class','category-text');
+                    categoryMeta.appendChild(categoryText);
+
+                    var timestamp = document.createElement('div');
+                    var theTime = doc.data().timestamp.toDate();
+                    timestamp.innerHTML = timestampCalc(theTime);
+                    
+                    timestamp.setAttribute('class','timestamp');
+                    categoryMeta.appendChild(timestamp);
+
+                    var answerForm = document.createElement('form');
+                    answerComposer.appendChild(answerForm);
+
+                    var answerInputField = document.createElement('textarea');
+                    answerInputField.setAttribute('type', 'text');
+                    answerInputField.setAttribute('class', 'answer-input-field');
+                    answerInputField.autofocus = true;
+                    answerInputField.placeholder = "Here's my story..."
+
+                    var charsCount = document.createElement('div');
+                    charsCount.style.color = 'red';
+                    charsCount.innerHTML = 'Please write more. -280';
+                    charsCount.setAttribute('class', 'chars-count'); 
+
+                    answerForm.appendChild(answerInputField);
+                    answerComposer.appendChild(charsCount);
+
+                    var composerCta = document.createElement('div');
+                    composerCta.setAttribute('class', 'composer-cta-disabled');
+                    composerCta.textContent = 'Post Story';
+                    answerComposer.appendChild(composerCta);
+                  
+                    var theirKeyAmount;
+                    answerInputField.addEventListener('keyup', function() {
+                      if(this.value.length < minLength) {
+                        charsCount.style.color = 'red';
+                        charsCount.innerHTML = 'Please write more. -';
+                        composerCta.setAttribute('class', 'composer-cta-disabled');
+                        charsCount.innerHTML += (minLength - this.value.length);
+                      }
+                      else {
+                        charsCount.style.color = 'green';
+                        charsCount.innerHTML = 'Great answer. ';
+                        composerCta.setAttribute('class', 'composer-cta-enabled');
+                        charsCount.innerHTML += (this.value.length - minLength);
+                      }
+                      theirKeyAmount = this.value.length;
                     });
+                    
+                    composerCta.addEventListener('click', function () {
+                      console.log(theirKeyAmount);
+                      if (theirKeyAmount > minLength) {
+                        
+                        var theirText = document.getElementsByClassName('answer-input-field')[0].value;
+                        console.log(theirText);
+
+                        answerCta.remove();
+                        answerForm.remove();
+                        subText.remove();
+                        answers.remove();
+                        textContainer.remove();
+                        divider.remove();
+                        noAnswerContainer.remove();
+                        answerComposer.remove();
+                        answerCompBackground.remove();
+
+                        var answerDiv = document.createElement('div');
+                        answerDiv.innerHTML = theirText;
+                        answerDiv.setAttribute('class','answer-text');
+                        document.getElementById('q-'+doc.data().questionID).appendChild(answerDiv);
+
+                        var db = firebase.firestore();
+                        var theQuestion = doc.data().questionID;
+
+                        db.collection('answers').add({
+                          text: theirText,
+                          questionID: theQuestion,
+                          timestamp: theTimestamp,
+                          category: 'Politics'
+                        })
+                        .then(function(docRef) {
+                          console.log("Document written with ID: ", docRef.id);
+                          var docRef = db.collection("Questions").doc(theQuestion);
+
+                          var answerCount = 0;
+                          docRef.get().then(function(doc) {
+                              if (doc.exists) {
+                                answerCount = doc.data().answers;
+                              } else {
+                                  // doc.data() will be undefined in this case
+                                  console.log("No such document!");
+                              }
+                          }).catch(function(error) {
+                              console.log("Error getting document:", error);
+                          });
+                          db.collection('Questions').doc(theQuestion).update({answers: answerCount + 1})
+
+                        })
+                        .catch(function(error) {
+                            console.error("Error adding document: ", error);
+                        });
+                      }
+                      
+
+                    })
+                    
 
                   })
                 }
@@ -381,22 +581,8 @@
 
         //var ques = document.getElementById('question-text-field').value;
         var minLength = 280;
-        var chars = document.getElementById('character-count'); 
-        var alert = document.getElementById('alert');
-        document.getElementById('question-text-field').onkeyup = function() {
-          chars.innerHTML = this.value.length;
-          console.log(this.value.length);
-          if(this.value.length < minLength) {
-            alert.style.color = 'red';
-            alert.innerHTML = 'Please write more.';
-          }
-          else {
-            alert.style.color = 'green';
-            alert.innerHTML = 'Great question.';
-          }
-        }
    
-        document.getElementById("post-question").addEventListener("click", postQuestion);
+        document.getElementById("ask-question").addEventListener("click", postQuestion);
 
       } //end of app initialization
 
@@ -430,26 +616,16 @@
 
       function postQuestion () {
         var db = firebase.firestore();
-        var theQuestion = document.getElementById('question-text-field').value;
+        var theQuestion = document.getElementById('question-input-field').value;
         var minLength = 280;
-        var chars = document.getElementById('chars'); 
-        var alert = document.getElementById('alert');
-        document.getElementById('question-text-field').onkeyup = function() {
-          chars.innerHTML = theQuestion.length;
-          if(!questionLength(theQuestion)) {
-            alert.innerHTML = 'too short';
-          }
-          else {
-            alert.innerHTML = '';
-          }
-        }
 
         if (theQuestion != '') {
           var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
+          var theCategory = "Politics";
         db.collection('Questions').add({
           text: theQuestion,
           answers: 0,
-          category: "Politics",
+          category: theCategory,
           questionID: null,
           timestamp: theTimestamp
         })
@@ -457,8 +633,9 @@
           console.log("Document written with ID: ", docRef.id);
           db.collection('Questions').doc(docRef.id).update({questionID: docRef.id});
 
-          document.getElementById('question-text-field').value = '';
-
+          document.getElementById('question-input-field').value = '';
+          document.getElementById('composer-container').remove();
+          // here 
           var theFeed = document.getElementById('the-feed');
           var questionContainer = document.createElement('div');
 
@@ -478,6 +655,25 @@
                 var categoryImage = document.createElement('div');
                 categoryImage.setAttribute('class','category-image');
                 categoryContainer.appendChild(categoryImage);
+                categoryImage.style.backgroundImage = "url('/assets/visuals/categories.png')";
+                if (theCategory == "Education"){
+                  categoryImage.style.backgroundPosition = '0px 0px';
+                }
+                else if (theCategory == "Identity"){
+                  categoryImage.style.backgroundPosition = '0px -81px';
+                }
+                else if (theCategory == "Politics"){
+                  categoryImage.style.backgroundPosition = '0px -42px';
+                }
+                else if (theCategory == "Health"){
+                  categoryImage.style.backgroundPosition = '0px -118px';
+                }
+                else if (theCategory == "Entertainment"){
+                  categoryImage.style.backgroundPosition = '0px -160px';
+                }
+                else {
+                  categoryImage.style.backgroundPosition = '0px -200px';
+                }
 
                 var categoryMeta = document.createElement('div');
                 categoryMeta.setAttribute('class','category-meta');
