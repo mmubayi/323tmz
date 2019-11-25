@@ -36,7 +36,6 @@
       #message { display: block; min-width: 650px; max-width: 650px; margin-top: 66px;}
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { color: #ffa100; font-size: 22px; font-weight: 300; margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
       #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
 
       #question-text-field{font-family: Avenir, Helvetica, Arial, sans-serif; font-size: 14px;
@@ -173,6 +172,26 @@
       .cat-title{
         color: #8A9BA8; font-size: 14px; margin-bottom: 8px;
       }
+
+      .cat-page-container{
+        display:flex; flex-direction: row; margin-bottom: 16px;
+      }
+
+      .cat-page-meta{
+        margin-left: 24px;
+      }
+
+      .cat-page-title{
+        margin-bottom: 4px;
+        font-size: 18px;
+      }
+
+      .cat-page-desc{
+        margin: 0px;
+        font-size: 14px;
+        color: #5C7080;
+      }
+
 
       @media (max-width: 600px) {
         body, #message { margin-top: 0; background-color: white; box-shadow: none; }
@@ -330,6 +349,58 @@
             categoryLink.addEventListener('click', function () {
               document.getElementById('the-feed').innerHTML = '';
               document.getElementById('category-container').innerHTML = '';
+
+              let catCont = document.createElement('div');
+              catCont.setAttribute('class','cat-page-container');
+              (document.getElementById('the-feed')).appendChild(catCont);
+
+              let categoryImage = document.createElement('div');
+              categoryImage.style.backgroundImage = "url('/assets/visuals/categories.png')";
+              categoryImage.style.height = '80px';
+              categoryImage.style.width = '80px';
+              categoryImage.style.backgroundSize = 'cover';
+              catCont.appendChild(categoryImage);
+
+              let theDesc = '';
+                if (doc.data().name == "Education"){
+                  categoryImage.style.backgroundPosition = '0px 0px';
+                  theDesc = "From primary school to graduate school, we've got you covered!";
+                }
+                else if (doc.data().name == "Identity"){
+                  categoryImage.style.backgroundPosition = '0px -160px';
+                  theDesc = 'Stories about identity: Who am I? Who are you? Who are we?';
+                }
+                else if (doc.data().name == "Politics"){
+                  categoryImage.style.backgroundPosition = '0px -81px';
+                  theDesc = "Let's get political with these stories about the world of politics";
+                }
+                else if (doc.data().name == "Health"){
+                  categoryImage.style.backgroundPosition = '0px -240px';
+                  theDesc = "Let's step into the medical world and read stories all about health";
+                }
+                else if (doc.data().name == "Entertainment"){
+                  categoryImage.style.backgroundPosition = '0px -320px';
+                  theDesc = "What new show are you watching? See stories about all things entertainment";
+                }
+                else {
+                  categoryImage.style.backgroundPosition = '0px -400px';
+                  theDesc = "If you're interested in the very earth that we live on, this is for you";
+                }
+
+              let catMeta = document.createElement('div');
+              catMeta.setAttribute('class','cat-page-meta');
+              catCont.appendChild(catMeta);
+
+              let catTitle = document.createElement('p');
+              catTitle.setAttribute('class', 'cat-page-title');
+              catTitle.textContent = doc.data().name;
+              catMeta.appendChild(catTitle);
+
+              let catDesc = document.createElement('p');
+              catDesc.setAttribute('class','cat-page-desc');
+              catDesc.textContent = theDesc;
+              catMeta.appendChild(catDesc);
+
               initializeApp(doc.data().name);
             })
 
