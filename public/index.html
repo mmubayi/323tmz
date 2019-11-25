@@ -308,27 +308,25 @@
         // });
 
         db.collection("categories").get().then(function(querySnapshot) {
+          var categoryContainer = document.getElementById('category-container');
+          var categoryLink = document.createElement('div');
+          categoryLink.setAttribute('class','category');
+          categoryLink.textContent = 'Feed';
+          categoryContainer.appendChild(categoryLink);
+          categoryLink.addEventListener('click', function () {
+              document.getElementById('the-feed').innerHTML = '';
+              document.getElementById('category-container').innerHTML = '';
+              initializeApp(null);
+            })
+
           querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
-            var categoryContainer = document.getElementById('category-container');
-            var categoryLink = document.createElement('div');
+            categoryLink = document.createElement('div');
             categoryLink.setAttribute('class','category');
             categoryLink.textContent = doc.data().name;
             // might have to put on img as opposed to container
             categoryContainer.appendChild(categoryLink);
-            //var categoryImg = document.createElement('img');
-            //categoryImg.setAttribute('src', doc.data().link );
-            //categoryImg.setAttribute('src', doc.data().link );
-            //categoryImg.style.height = '45px';
-            //categoryImg.style.width = '120px';
-            //categoryImg.style.paddingLeft = '10px';
-            //categoryContainer.appendChild(categoryImg);
-            // categoryContainer.addEventListener('click', function () {
-            //   document.getElementById('the-feed').innerHTML = '';
-            //   document.getElementById('category-container').innerHTML = '';
-            //   initializeApp(doc.id);
-            //   console.log(doc.id);
-            // })
+            
             categoryLink.addEventListener('click', function () {
               document.getElementById('the-feed').innerHTML = '';
               document.getElementById('category-container').innerHTML = '';
