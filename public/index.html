@@ -74,7 +74,7 @@
                   padding: 8px 16px; position: relative; left: 372px; border-radius: 3px;
                   cursor: pointer;}
 
-      .composer-cta-enabled{background-color: #48AFF0; color: white; font-size: 14px;
+      .composer-cta-enabled{background-color: #576eb5; color: white; font-size: 14px;
                   padding: 8px 16px; border-radius: 3px; position: absolute; left: 542px;
                   width:max-content; margin-bottom: 16px; display: inline; cursor: pointer;
       }
@@ -145,7 +145,7 @@
       }
 
       #ask-question{
-        background-color: #48AFF0; color: white; font-size: 14px; 
+        background-color: #576eb5; color: white; font-size: 14px; 
         padding: 8px 16px; border-radius: 3px; position: relative; float: right;
         width: max-content; margin-bottom: 16px; cursor: pointer;
       }
@@ -332,8 +332,7 @@
             categoryLink.addEventListener('click', function () {
               document.getElementById('the-feed').innerHTML = '';
               document.getElementById('category-container').innerHTML = '';
-              initializeApp(doc.id);
-              console.log(doc.id);
+              initializeApp(doc.data().name);
             })
 
 
@@ -363,7 +362,7 @@
         var theFeed = document.getElementById("the-feed");
 
         if (overallCategory){
-          var theQuestions = db.collection("Questions").where('category','==','Politics');
+          var theQuestions = db.collection("Questions").where('category','==', overallCategory);
         }
         else {
           var theQuestions = db.collection("Questions").orderBy('timestamp','desc');
@@ -376,6 +375,8 @@
                 questionContainer.setAttribute('id', 'q-'+doc.data().questionID);
                 questionContainer.setAttribute('class','question-container');
                 theFeed.appendChild(questionContainer);
+
+                console.log('theQContainer: ' + questionContainer);
 
                 var questionText = document.createElement('div');
                 questionText.innerHTML = doc.data().text;
@@ -598,7 +599,7 @@
                           text: theirText,
                           questionID: theQuestion,
                           timestamp: theTimestamp,
-                          category: 'Politics'
+                          category: doc.data().category,
                         })
                         .then(function(docRef) {
                           console.log("Document written with ID: ", docRef.id);
@@ -634,7 +635,7 @@
 
 
         if (overallCategory){
-          var theAnswers = db.collection("answers").where('category','==','Politics');
+          var theAnswers = db.collection("answers").where('category','==', overallCategory);
         }
         else {
           var theAnswers = db.collection("answers");
@@ -647,6 +648,7 @@
                 answers.innerHTML = doc.data().text;
                 var theirQuestion = document.getElementById("q-" + doc.data().questionID);
                 answers.setAttribute('class','answer-text');
+                console.log(theirQuestion);
                 theirQuestion.appendChild(answers);
             });
         });
@@ -728,7 +730,7 @@
           db.collection('Questions').doc(docRef.id).update({questionID: docRef.id});
 
           document.getElementById('question-input-field').value = '';
-          document.getElementById('composer-container').remove();
+          document.getElementById('composer-container').style.display = 'none';
           // here 
           var theFeed = document.getElementById('the-feed');
           var questionContainer = document.createElement('div');
