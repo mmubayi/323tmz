@@ -25,12 +25,12 @@
       #logo {margin-left:310px}
       #header-zero{height:0px;}
       #welcome-message{position: absolute; color: white; font-size: 16px; font-weight: 400;
-                      width:500px; padding-left: 10px; padding-top:10px}
+                      width:500px; padding-left: 10px; padding-top:7px}
       #sign-out { color: white; font-size: 14px; margin-top: 16px;
                   padding: 8px 16px; position: relative; left: 560px; margin-left: 90px; border-radius: 3px;
                   width: max-content; cursor: pointer;}
       #sign-in {background-color: #576eb5; color: white; font-size: 14px; margin-top: 16px;
-                  padding: 8px 16px; position: relative; margin-left: auto; margin-right: auto; display: block; border-radius: 3px;
+                  padding-top: 8px; padding-left: 16px; padding-right: 16px; position: relative; margin-left: auto; margin-right: auto; display: block; border-radius: 3px;
                   width: max-content; cursor: pointer;}           
       #container {width: max-content; flex-direction: row}
       #message { display: block; max-width: 650px; margin-top: 66px;}
@@ -350,6 +350,8 @@
         var signOutButton = document.getElementById('sign-out');
         signOutButton.addEventListener('click', function () {
           document.getElementById('composer-container').style.display = 'block';
+        })
+
         var qCloseComposer = document.getElementById('close-composer');
         qCloseComposer.addEventListener('click', function () {
           document.getElementById('composer-container').style.display = 'none';
