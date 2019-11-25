@@ -86,23 +86,28 @@
         float: right; cursor: pointer;
       }
 
+      #close-composer {
+        height: 20px; width: 20px; margin-bottom: 16px; fill: #394B59; position: relative;
+        float: right; cursor: pointer;
+      }
+
       .blackout {position:fixed;
       top:0;
       left:0;
       background:rgba(0,0,0,0.6);
-      z-index:5;
+      z-index:6;
       width:100%;
       height:100%;
       }
 
-      .answer-composer{ position: relative; margin: auto; top: 40px; z-index: 6;
+      .answer-composer{ position: relative; margin: auto; top: 40px; z-index: 7;
         width: 620px; height: max-content; background-color: white; border-radius: 5px;
         height: 276px; padding: 16px;
       }
 
       .question-composer{ position: relative; margin: auto; top: 40px; z-index: 6;
         width: 620px; height: max-content; background-color: white; border-radius: 5px;
-        height: 276px; padding: 16px; 
+        height: 276px; padding: 24px; 
       }
 
       .answer-input-field {
@@ -121,8 +126,8 @@
 
       #question-input-field{
         margin-top: 16px; width: 616px; height: 1em; color: #202B33; font-size: 14px; 
-        border: 0px; outline: none; overflow: scroll; margin-bottom: 8px;
-        font-family: Avenir, Helvetica, Arial, sans-serif;
+        border: 0px; outline: none; overflow: scroll; margin-bottom: 36px;
+        font-family: Avenir, Helvetica, Arial, sans-serif; 
       }
 
       .prompt-points{
@@ -136,11 +141,35 @@
       #ask-question{
         background-color: #48AFF0; color: white; font-size: 14px; 
         padding: 8px 16px; border-radius: 3px; position: relative; float: right;
-        width: max-content; margin-bottom: 16px;
+        width: max-content; margin-bottom: 16px; cursor: pointer;
       }
 
       #sign-in{
         position: relative; float: right;
+      }
+
+      .category-list {
+        padding: 4px 8px;
+        color: #8A9BA8; font-size: 12px; display: inline; border: 1px solid #8A9BA8;
+        border-radius: 5px; margin-right: 4px; cursor: pointer;
+      }
+
+      .category-list:hover{
+        background-color: #E1E8ED;
+      }
+
+      .selected-category-list{
+        padding: 4px 8px; background-color: #8A9BA8;
+        color: white; font-size: 12px; display: inline; border: 1px solid #8A9BA8;
+        border-radius: 5px; margin-right: 4px; cursor: pointer;
+      }
+
+      #select-cat-container{
+        height:max-content; margin-bottom: 16px;
+      }
+
+      .cat-title{
+        color: #8A9BA8; font-size: 14px; margin-bottom: 8px;
       }
 
       @media (max-width: 600px) {
@@ -154,10 +183,18 @@
       <div id='composer-container'>
         <div class='blackout'></div>
         <div class='question-composer'>
-        <div class='question-comp-title'>What's your question?</div>
-          <form>
+          <img id='close-composer' src='/assets/visuals/cross.svg'></img>
+          <div class='question-comp-title'>What's your question?</div>
             <input type='text' id='question-input-field' autofocus='true' placeholder="Tell me a story about the time...">
-          </form>
+            <div class='cat-title'>CATEGORIES</div>
+            <div id='select-cat-container'>
+                <div class='category-list' id='politics'>Politics</div>
+                <div class='category-list' id='identity'>Identity</div>
+                <div class='category-list' id='health'>Health</div>
+                <div class='category-list' id='entertainment'>Entertainment</div>
+                <div class='category-list' id='climate'>Climate</div>
+                <div class='category-list' id='education'>Education</div>
+            </div>
           <div id='ask-question'>Ask Question</div>
         </div>
       </div>
@@ -281,6 +318,11 @@
         var postQuestionCta = document.getElementById('post-question');
         postQuestionCta.addEventListener('click', function () {
           document.getElementById('composer-container').style.display = 'block';
+        })
+
+        var qCloseComposer = document.getElementById('close-composer');
+        qCloseComposer.addEventListener('click', function () {
+          document.getElementById('composer-container').style.display = 'none';
         })
 
 
@@ -582,6 +624,25 @@
         //var ques = document.getElementById('question-text-field').value;
         var minLength = 280;
    
+        var selectedCategory = null;
+        let categoryList = document.getElementsByClassName('category-list');
+        let i;
+        for (i = 0; i < categoryList.length; i++) {
+          categoryList[i].addEventListener('click', function(elm){
+            console.log(elm.target);
+            if ((elm.target).classList[0] == 'category-list'){
+              (elm.target).classList.add('selected-category-list');
+              (elm.target).classList.remove('category-list');
+              console.log((elm.target).classList.length);
+            }
+            else{
+              (elm.target).classList.remove('selected-category-list');
+              (elm.target).classList.add('category-list');
+            }
+          })
+        }
+
+        
         document.getElementById("ask-question").addEventListener("click", postQuestion);
 
       } //end of app initialization
@@ -619,9 +680,12 @@
         var theQuestion = document.getElementById('question-input-field').value;
         var minLength = 280;
 
+        let allCategories = document.getElementsByClassName('selected-category-list');
+        let theirCat = allCategories[0].textContent;
+
         if (theQuestion != '') {
           var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
-          var theCategory = "Politics";
+          var theCategory = theirCat;
         db.collection('Questions').add({
           text: theQuestion,
           answers: 0,
@@ -680,7 +744,7 @@
                 categoryContainer.appendChild(categoryMeta);
 
                 var categoryText = document.createElement('div');
-                categoryText.innerHTML = 'Politics';
+                categoryText.innerHTML = theCategory;
                 categoryText.setAttribute('class','category-text');
                 categoryMeta.appendChild(categoryText);
 
