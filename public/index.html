@@ -33,7 +33,7 @@
                   padding: 8px 16px; position: relative; margin-left: auto; margin-right: auto; display: block; border-radius: 3px;
                   width: max-content; cursor: pointer;}           
       #container {width: max-content; flex-direction: row}
-      #message { display: block; max-width: 650px; margin-top: 66px;}
+      #message { display: block; min-width: 650px; max-width: 650px; margin-top: 66px;}
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { color: #ffa100; font-size: 22px; font-weight: 300; margin: 0 0 16px;}
       #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
@@ -41,8 +41,8 @@
 
       #question-text-field{font-family: Avenir, Helvetica, Arial, sans-serif; font-size: 14px;
             color: #202B33; width:100%; border: 0px; outline: none;}
-      #post-question {background-color: #48AFF0; color: white; font-size: 14px; margin-top: 10px;
-                  padding: 8px 16px; position: relative; left: 505px; margin-left: 108px; border-radius: 3px;
+      #post-question {border: 1px solid white; border-radius: 5px; color: white; font-size: 14px; margin-top: 12px;
+                  padding: 4px 12px; position: relative; left: 510px; margin-left: 108px; border-radius: 3px;
                   width: max-content; cursor: pointer;}
 
       #category-container{margin-top: 8px; margin-right: 16px; width: 120px; margin-top: 66px;}
@@ -51,7 +51,7 @@
                 text-decoration: none; padding: 8px;}
       
       .category:hover {background-color: #D8E1E8; border-radius: 3px;}
-      .header {height: 52px; background-color: #7157D9; position: fixed;}
+      .header {height: 52px; background-color: #1d9589; position: fixed;}
       .question-text {color: #202B33; font-size: 18px; margin-bottom: 8px;}
       .question-container{border: 1px solid #CED9E0; border-radius: 5px; padding: 16px; 
                           margin-bottom: 16px; background-color: white; }
@@ -70,7 +70,7 @@
       .no-answer-text{color:#202B33; font-size: 14px; margin-top: 16px;}
       .no-answer-subtext{color: #5C7080; font-size:14px;}
 
-      .answer-cta{background-color: #48AFF0; color: white; font-size: 14px; margin-top: 16px;
+      .answer-cta{background-color: #576eb5; color: white; font-size: 14px; margin-top: 16px;
                   padding: 8px 16px; position: relative; left: 372px; border-radius: 3px;
                   cursor: pointer;}
 
@@ -228,8 +228,10 @@
     
     <div id='container'>
         <div class='header' id='header'>
-            <div id='logo'>
+            <div id='logo'> 
+                <a href="index.html">
               <img src="assets/visuals/TapestryLogo-02.png" style="width:50px">
+              </a>
             </div>
             <div id='header-zero'>
                 <h1 id="welcome-message"> Welcome. </h1>
