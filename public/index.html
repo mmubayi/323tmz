@@ -22,11 +22,17 @@
       
       #header {position: fixed; top:-2px; display:flex; flex-direction: row; height: 52px;
               width: 100%; z-index: 5;}
+      #logo {margin-left:310px}
       #header-zero{height:0px;}
       #welcome-message{position: absolute; color: white; font-size: 16px; font-weight: 400;
                       width:500px; padding-left: 10px; padding-top:10px}
-      #buttons {padding-left: 500px;}
-      #container {margin: 0 auto; width: max-content; flex-direction: row}
+      #sign-out { color: white; font-size: 14px; margin-top: 16px;
+                  padding: 8px 16px; position: relative; left: 560px; margin-left: 90px; border-radius: 3px;
+                  width: max-content; cursor: pointer;}
+      #sign-in {background-color: #576eb5; color: white; font-size: 14px; margin-top: 16px;
+                  padding: 8px 16px; position: relative; margin-left: auto; margin-right: auto; display: block; border-radius: 3px;
+                  width: max-content; cursor: pointer;}           
+      #container {width: max-content; flex-direction: row}
       #message { display: block; max-width: 650px; margin-top: 66px;}
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { color: #ffa100; font-size: 22px; font-weight: 300; margin: 0 0 16px;}
@@ -35,12 +41,12 @@
 
       #question-text-field{font-family: Avenir, Helvetica, Arial, sans-serif; font-size: 14px;
             color: #202B33; width:100%; border: 0px; outline: none;}
-      #post-question {background-color: #48AFF0; color: white; font-size: 14px; margin-top: 16px;
-                  padding: 8px 16px; position: relative; left: 505px; border-radius: 3px;
+      #post-question {background-color: #48AFF0; color: white; font-size: 14px; margin-top: 10px;
+                  padding: 8px 16px; position: relative; left: 505px; margin-left: 108px; border-radius: 3px;
                   width: max-content; cursor: pointer;}
 
       #category-container{margin-top: 8px; margin-right: 16px; width: 120px; margin-top: 66px;}
-      #content{display: flex; flex-direction: row}
+      #content{display: flex; flex-direction: row; margin-left:40%}
       .category {font-size: 14px; color: #202B33; margin-bottom: 8px; display: block;
                 text-decoration: none; padding: 8px;}
       
@@ -138,18 +144,36 @@
         padding: 8px 16px; border-radius: 3px; position: relative; float: right;
         width: max-content; margin-bottom: 16px;
       }
-
-      #sign-in{
-        position: relative; float: right;
-      }
-
       @media (max-width: 600px) {
         body, #message { margin-top: 0; background-color: white; box-shadow: none; }
         body { border-top: 16px solid #ffa100; }
       }
     </style>
   </head>
+
+  
+
+
   <body>
+    <div id="unauthorized" hidden>
+
+      <div id="wrapper" style="overflow:hidden">
+        <img src="assets/visuals/Tapestry.gif" style="width:30%; padding-top:100px; display: block; margin-left: auto; margin-right: auto;">
+        <img src="assets/visuals/Name.gif" style="width:30%; padding-top:10px; display: block; margin-left: auto; margin-right: auto;">
+      </div>
+          
+      <button id="sign-in" onclick="signIn()" hidden>
+          Sign-in
+        </button>
+      </p>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+          
+      </div>
+
+    <div id='authorized' hidden>
     <div class="question">
       <div id='composer-container'>
         <div class='blackout'></div>
@@ -171,17 +195,15 @@
             </div>
             <div id='header-zero'>
                 <h1 id="welcome-message"> Welcome. </h1>
-                <button id="sign-in" onclick="signIn()" hidden>
-                    Sign-in
-                  </button>
+                
                   <div id='post-question'>Ask question</div>
             </div>  
-            <div id='buttons'>
+            <div id='sign-out-button'>
             </div>
             <div>
-            <button id="sign-out" onclick="signOut()" hidden>
+            <div id="sign-out" onclick="signOut()">
                 Sign-out
-            </button>
+            </div>
             
             </div>
           </div>
@@ -199,7 +221,7 @@
         </div>
       </div>
     </div>
-    
+  </div> <!-- authorized-->
    
    <script>
 
@@ -280,6 +302,11 @@
 
         var postQuestionCta = document.getElementById('post-question');
         postQuestionCta.addEventListener('click', function () {
+          document.getElementById('composer-container').style.display = 'block';
+        })
+
+        var signOutButton = document.getElementById('sign-out');
+        signOutButton.addEventListener('click', function () {
           document.getElementById('composer-container').style.display = 'block';
         })
 
@@ -756,14 +783,18 @@
 
     function authStateObserver(user) {
       if (user) { // User is signed in!
+          document.getElementById("authorized").hidden = false;
+          document.getElementById("unauthorized").hidden = true;
           document.getElementById("sign-in").hidden = true;
-          document.getElementById("sign-out").hidden = false;
+          //document.getElementById("sign-out").hidden = false;
           var welc = document.getElementById("welcome-message");
           welc.innerHTML = "Welcome, " + firebase.auth().currentUser.displayName;
 
       } else { // User is signed out!
+          document.getElementById("unauthorized").hidden = false;
+          document.getElementById("authorized").hidden = true;
           document.getElementById("sign-in").hidden = false;
-          document.getElementById("sign-out").hidden = true;
+          
         }
       }
     
