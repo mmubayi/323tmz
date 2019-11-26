@@ -489,7 +489,7 @@
                 categoryMeta.appendChild(categoryText);
 
                 var timestamp = document.createElement('div');
-                var theTime = doc.data().timestamp.toDate();
+                var theTime = theTimestamp.toDate();
                 timestamp.innerHTML = timestampCalc(theTime);
                 
                 timestamp.setAttribute('class','timestamp');
@@ -795,6 +795,7 @@
           timestamp: theTimestamp
         })
         .then(function(docRef) {
+          var theQuestionId = docRef.id;
           console.log("Document written with ID: ", docRef.id);
           db.collection('Questions').doc(docRef.id).update({questionID: docRef.id});
 
@@ -881,6 +882,181 @@
                   answerCta.innerHTML = "Answer";
                   answerCta.setAttribute('class', 'answer-cta');
                   noAnswerContainer.appendChild(answerCta);
+
+                  answerCta.addEventListener('click', function () {
+
+                    var answerCompBackground = document.createElement('div');
+                    answerCompBackground.setAttribute('class','blackout');
+                    var theDocument = document.getElementsByTagName('body')[0];
+                    theDocument.prepend(answerCompBackground);
+
+                    var composerContainer = document.createElement('div');
+                    composerContainer.setAttribute('class','composer-container');
+                    theDocument.prepend(composerContainer);
+
+                    var answerComposer = document.createElement('div');
+                    answerComposer.setAttribute('class','answer-composer');
+                    composerContainer.appendChild(answerComposer);
+
+                    var closeComposer = document.createElement('img');
+                    closeComposer.src = '/assets/visuals/cross.svg';
+                    closeComposer.setAttribute('class','close-composer');
+                    answerComposer.appendChild(closeComposer);
+
+                    closeComposer.addEventListener('click', function () {
+                      composerContainer.remove();
+                      answerCompBackground.remove();
+                    })
+
+                    var initialQuestion = document.getElementById('q-'+docRef.id)
+                                            .getElementsByClassName('question-text')[0].textContent;
+
+                    var answerRecap = document.createElement('div');
+                    answerRecap.setAttribute('class','answer-recap');
+                    answerRecap.textContent = theQuestion;
+                    answerComposer.appendChild(answerRecap);
+
+                    var categoryContainer = document.createElement('div');
+                    categoryContainer.setAttribute('class','category-container');
+                    answerComposer.appendChild(categoryContainer);
+
+                    var categoryImage = document.createElement('div');
+                    categoryImage.setAttribute('class','category-image');
+                    categoryContainer.appendChild(categoryImage);
+                    categoryImage.style.backgroundImage = "url('/assets/visuals/categories.png')";
+                    if (theCategory == "Education"){
+                      categoryImage.style.backgroundPosition = '0px 0px';
+                    }
+                    else if (theCategory == "Identity"){
+                      categoryImage.style.backgroundPosition = '0px -81px';
+                    }
+                    else if (theCategory == "Politics"){
+                      categoryImage.style.backgroundPosition = '0px -42px';
+                    }
+                    else if (theCategory == "Health"){
+                      categoryImage.style.backgroundPosition = '0px -118px';
+                    }
+                    else if (theCategory == "Entertainment"){
+                      categoryImage.style.backgroundPosition = '0px -160px';
+                    }
+                    else {
+                      categoryImage.style.backgroundPosition = '0px -200px';
+                    }
+
+                    var categoryMeta = document.createElement('div');
+                    categoryMeta.setAttribute('class','category-meta');
+                    categoryContainer.appendChild(categoryMeta);
+
+                    var categoryText = document.createElement('div');
+                    categoryText.innerHTML = theCategory;
+                    categoryText.setAttribute('class','category-text');
+                    categoryMeta.appendChild(categoryText);
+
+                    var timestamp = document.createElement('div');
+                    var theTime = theTimestamp.toDate();
+                    timestamp.innerHTML = timestampCalc(theTime);
+                    
+                    timestamp.setAttribute('class','timestamp');
+                    categoryMeta.appendChild(timestamp);
+
+                    var answerForm = document.createElement('form');
+                    answerComposer.appendChild(answerForm);
+
+                    var answerInputField = document.createElement('textarea');
+                    answerInputField.setAttribute('type', 'text');
+                    answerInputField.setAttribute('class', 'answer-input-field');
+                    answerInputField.autofocus = true;
+                    answerInputField.placeholder = "Here's my story..."
+
+                    var charsCount = document.createElement('div');
+                    charsCount.style.color = 'red';
+                    charsCount.innerHTML = 'Please write more. -280';
+                    charsCount.setAttribute('class', 'chars-count'); 
+
+                    answerForm.appendChild(answerInputField);
+                    answerComposer.appendChild(charsCount);
+
+                    var composerCta = document.createElement('div');
+                    composerCta.setAttribute('class', 'composer-cta-disabled');
+                    composerCta.textContent = 'Post Story';
+                    answerComposer.appendChild(composerCta);
+                  
+                    var theirKeyAmount;
+                    answerInputField.addEventListener('keyup', function() {
+                      if(this.value.length < minLength) {
+                        charsCount.style.color = 'red';
+                        charsCount.innerHTML = 'Please write more. -';
+                        composerCta.setAttribute('class', 'composer-cta-disabled');
+                        charsCount.innerHTML += (minLength - this.value.length);
+                      }
+                      else {
+                        charsCount.style.color = 'green';
+                        charsCount.innerHTML = 'Great answer. ';
+                        composerCta.setAttribute('class', 'composer-cta-enabled');
+                        charsCount.innerHTML += (this.value.length - minLength);
+                      }
+                      theirKeyAmount = this.value.length;
+                    });
+                    
+                    composerCta.addEventListener('click', function () {
+                      console.log(theirKeyAmount);
+                      if (theirKeyAmount > minLength) {
+                        
+                        var theirText = document.getElementsByClassName('answer-input-field')[0].value;
+                        console.log(theirText);
+
+                        answerCta.remove();
+                        answerForm.remove();
+                        subText.remove();
+                        answers.remove();
+                        textContainer.remove();
+                        divider.remove();
+                        noAnswerContainer.remove();
+                        answerComposer.remove();
+                        answerCompBackground.remove();
+
+                        var answerDiv = document.createElement('div');
+                        answerDiv.innerHTML = theirText;
+                        answerDiv.setAttribute('class','answer-text');
+                        document.getElementById('q-'+docRef.id).appendChild(answerDiv);
+
+                        var db = firebase.firestore();
+                        //var theQuestion = doc.data().questionID;
+
+                        db.collection('answers').add({
+                          text: theirText,
+                          questionID: theQuestionId,
+                          timestamp: theTimestamp,
+                          category: theCategory,
+                        })
+                        .then(function(docRef) {
+                          console.log("Document written with ID: ", docRef.id);
+                          var docRef = db.collection("Questions").doc(theQuestionId);
+
+                          var answerCount = 0;
+                          docRef.get().then(function(doc) {
+                              if (doc.exists) {
+                                answerCount = doc.data().answers;
+                              } else {
+                                  // doc.data() will be undefined in this case
+                                  console.log("No such document!");
+                              }
+                          }).catch(function(error) {
+                              console.log("Error getting document:", error);
+                          });
+                          db.collection('Questions').doc(theQuestionId).update({answers: answerCount + 1})
+
+                        })
+                        .catch(function(error) {
+                            console.error("Error adding document: ", error);
+                        });
+                      }
+                      
+
+                    })
+                    
+
+                  })
                 
           })
           .catch(function(error) {
