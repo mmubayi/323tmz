@@ -43,6 +43,9 @@
       #post-question {border: 1px solid white; border-radius: 5px; color: white; font-size: 14px; margin-top: 12px;
                   padding: 4px 12px; position: relative; left: 510px; margin-left: 108px; border-radius: 3px;
                   width: max-content; cursor: pointer;}
+      #post-question:hover{
+        background-color: white; color: #1d9589;
+      }
 
       #category-container{margin-top: 8px; margin-right: 16px; width: 120px; margin-top: 66px;}
       #content{display: flex; flex-direction: row; margin-left:40%}
@@ -71,11 +74,17 @@
 
       .answer-cta{background-color: #576eb5; color: white; font-size: 14px; margin-top: 16px;
                   padding: 8px 16px; position: relative; left: 372px; border-radius: 3px;
-                  cursor: pointer;}
+                  cursor: pointer; }
+      .answer-cta:hover{
+        background-color: #627ac7; color: white;
+      }
 
       .composer-cta-enabled{background-color: #576eb5; color: white; font-size: 14px;
                   padding: 8px 16px; border-radius: 3px; position: absolute; left: 542px;
                   width:max-content; margin-bottom: 16px; display: inline; cursor: pointer;
+      }
+      .composer-cta-enabled:hover{
+        background-color: #627ac7; color: white;
       }
       .composer-cta-disabled{background-color: #E1E8EC; color: #9EABB5; font-size: 14px; 
                   padding: 8px 16px; border-radius: 3px; position: absolute; left: 542px;
@@ -112,7 +121,7 @@
 
       .question-composer{ position: relative; margin: auto; top: 40px; z-index: 6;
         width: 620px; height: max-content; background-color: white; border-radius: 5px;
-        height: 276px; padding: 24px; 
+        height: 212px; padding: 24px; 
       }
 
       .answer-input-field {
@@ -130,7 +139,7 @@
       }
 
       #question-input-field{
-        margin-top: 16px; width: 616px; height: 1em; color: #202B33; font-size: 14px; 
+        margin-top: 16px; width: 616px; height: 1.5em; color: #202B33; font-size: 14px; 
         border: 0px; outline: none; overflow: scroll; margin-bottom: 36px;
         font-family: Avenir, Helvetica, Arial, sans-serif; 
       }
@@ -732,9 +741,16 @@
           categoryList[i].addEventListener('click', function(elm){
             console.log(elm.target);
             if ((elm.target).classList[0] == 'category-list'){
+              if ((document.getElementsByClassName('selected-category-list').length != 0)){
+                (document.getElementsByClassName('selected-category-list'))[0]
+                                      .classList.add('category-list');
+                (document.getElementsByClassName('selected-category-list'))[0]
+                                      .classList.remove('selected-category-list');
+                                   
+              }
               (elm.target).classList.add('selected-category-list');
               (elm.target).classList.remove('category-list');
-              console.log((elm.target).classList.length);
+              
             }
             else{
               (elm.target).classList.remove('selected-category-list');
@@ -784,7 +800,7 @@
         let allCategories = document.getElementsByClassName('selected-category-list');
         let theirCat = allCategories[0].textContent;
 
-        if (theQuestion != '') {
+        if (theQuestion != '' && allCategories.length == 1) {
           var theTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
           var theCategory = theirCat;
         db.collection('Questions').add({
